@@ -3,12 +3,11 @@ from .cookie import RuobrCookies
 
 class RuobrParser():
   
-  def __init__(self,username,password) -> None:
-    self.__data = {'username' : username,
-                   'password' : password}
+  def __init__(self,username : str, password: str) -> None:
+    self.__cookies = RuobrCookies(username,password).cookies()
     
   def marks(self) -> Marks:
-    return Marks(self.__data)
+    return Marks(self.__cookies)
 
 
 

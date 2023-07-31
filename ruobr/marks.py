@@ -7,9 +7,9 @@ from .extra import crop, headers
 
 class Marks():
   
-  def __init__(self, __data : dict) -> None:
-    self.__cookies = RuobrCookies(*__data.values()).cookies()
-
+  def __init__(self, __cookies : dict) -> None:
+    self.__cookies = __cookies
+  
   def __marks(self) -> list:
 
     async def pagination(session : aiohttp.ClientSession) -> int:
