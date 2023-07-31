@@ -1,5 +1,6 @@
 from .marks import Marks
 from .cookie import RuobrCookies
+from .schedule import Schedule
 
 class RuobrParser():
   
@@ -9,5 +10,5 @@ class RuobrParser():
   def marks(self) -> Marks:
     return Marks(self.__cookies)
 
-
-
+  def schedule(self):
+    return Schedule(self.__cookies)
