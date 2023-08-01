@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime
 from .extra import headers
-from .exceptions import IncorrectDateError,EmptyDateError
+from .exceptions import IncorrectDateError
 
 class Schedule:
 

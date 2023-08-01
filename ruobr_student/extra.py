@@ -9,4 +9,3 @@ def crop(__string: str, start:str, end:str) -> str:
   __string = __string[s:]
   e = __string.find(end)
   return __string[:e]
-
