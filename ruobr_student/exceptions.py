@@ -9,3 +9,9 @@ class IncorrectDateError(RuobrExcetion):
 
 class EmptyDateError(RuobrExcetion):
   ...
+
+class RequestError(RuobrExcetion):
+  ...
+  
+class DateNotFoundError(RuobrExcetion):
+  ...
