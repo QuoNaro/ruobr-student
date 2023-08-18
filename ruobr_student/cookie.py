@@ -1,6 +1,6 @@
 import requests
 from .extra import headers
-from .exceptions import AuthorizationError
+from .exceptions import AuthorizationError, RequestError
 
 class RuobrCookies:
   
@@ -19,7 +19,9 @@ class RuobrCookies:
     data = {'username' : self.username, 'password' : self.password}
     session = requests.Session()
     
-    session.get('https://cabinet.ruobr.ru/login/', headers=headers)
+    response = session.get('https://cabinet.ruobr.ru/login/', headers=headers)
+    if response.status_code != 200:
+      raise RequestError(f"Status code [{response.status_code}]")
     data |= {'csrfmiddlewaretoken': dict(session.cookies)['csrftoken']}
     
     session.post('https://cabinet.ruobr.ru/login/', headers=headers, data=data)
