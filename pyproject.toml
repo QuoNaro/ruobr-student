@@ -12,6 +12,7 @@ requests = "2.31.0"
 asyncio= "3.4.3"
 bs4= "4.12.2"
 aiohttp= "3.8.5"
+lxml=="4.9.3"
 
 [build-system]
 requires = ["poetry-core"]
