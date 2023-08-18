@@ -4,7 +4,7 @@ version = "1.0.0"
 description = "Доступ к данным cabinet.ruobr.ru для студентов"
 authors = ["QuoNaro <QuoNaro@mail.ru>"]
 readme = "README.md"
-packages = [{include = "ruobr-student"}]
+packages = [{include = "ruobr_student"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10"
