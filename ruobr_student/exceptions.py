@@ -1,17 +1,17 @@
-class RuobrExcetion(Exception):
+class RuobrException(Exception):
   ...
 
-class AuthorizationError(RuobrExcetion):
+class AuthorizationError(RuobrException):
   ...
   
-class IncorrectDateError(RuobrExcetion):
+class IncorrectDateError(RuobrException):
   ...
 
-class EmptyDateError(RuobrExcetion):
+class EmptyDateError(RuobrException):
   ...
 
-class RequestError(RuobrExcetion):
+class RequestError(RuobrException):
   ...
   
-class DateNotFoundError(RuobrExcetion):
+class DateNotFoundError(RuobrException):
   ...
