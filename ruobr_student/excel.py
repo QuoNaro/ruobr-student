@@ -12,7 +12,7 @@ from dateutil.relativedelta import relativedelta
 
 from .marks import Marks
 from .exceptions import DateNotFoundError
-
+from .extra import get_student_year
 
 def string_year(month_num : int | str , year : int | str) -> str :
   if 9 <= month_num <= 12:
@@ -20,10 +20,6 @@ def string_year(month_num : int | str , year : int | str) -> str :
   else :
     return year + 1
   
-def get_student_year(__year : str) -> list :
-  start = datetime.strptime(f'0109{__year}', "%d%m%Y").date()
-  dates = [start.strftime('%m.%Y')]+ [(start + relativedelta(months=date)).strftime('%m.%Y') for date in range(1, 10)]
-  return dates
 
 
 @dataclass
@@ -102,22 +98,21 @@ class _styles_object:
     method_list = [m for m in self.__class__.__dict__.values() if inspect.isfunction(m) and m != __class__.__init__]
     for method in method_list:
       method(self)
-   
+  
   def neutral(self) -> None:
     ns = NamedStyle(name='neutral')
     ns.fill = PatternFill(fgColor='f3da0b', fill_type='solid')
     ns.font = Font(color='1f0800', name='Bahnscrift', bold=False)
     ns.alignment = Alignment(horizontal='center', vertical='center')
     self.wb.add_named_style(ns)
-    setattr(self.__class__, ns.name , ns.name)
-  
+    
   def bad(self) -> None:
     ns = NamedStyle(name='bad')
     ns.fill = PatternFill(fgColor='ff8e7a', fill_type='solid')
     ns.font = Font(color='1f0800', name='Bahnscrift', bold=True)
     ns.alignment = Alignment(horizontal='center', vertical='center')
     self.wb.add_named_style(ns)
-    setattr(self.__class__, ns.name , ns.name)
+    
     
 
 
@@ -127,7 +122,7 @@ class ExcelTable:
     self.MARKS = marks.get_all()
     self.workbook = openpyxl.Workbook()
     self.sheet = self.workbook['Sheet']
-    self.style = _styles_object(self.workbook)
+    style = _styles_object(self.workbook)
     self.year = year
   
   def __month_generator(self):
@@ -195,11 +190,11 @@ class ExcelTable:
         
         # Выделение плохих оценок
         two_indices = [i+1 for i, x in enumerate(body[:-1]) if '2' in x]
-        self.__recolor_bad_marks(two_indices,self.style.bad)
+        self.__recolor_bad_marks(two_indices,'bad')
         
         # Выделение средних оценок
         three_indices = [i+1 for i, x in enumerate(body[:-1]) if '3' in x]
-        self.__recolor_bad_marks(three_indices,self.style.neutral)
+        self.__recolor_bad_marks(three_indices,'neutral')
   
   def __post_processing(self) -> None:
     # Изменение размера ячеек

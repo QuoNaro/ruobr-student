@@ -3,7 +3,12 @@ import aiohttp
 from bs4 import BeautifulSoup
 from datetime import datetime
 from dataclasses import dataclass
-from .extra import crop, headers
+from itertools import groupby,chain
+from .extra import crop, headers,get_student_year
+from .exceptions import DateNotFoundError
+
+
+
 
 @dataclass
 class Journal():
@@ -14,6 +19,14 @@ class Journal():
   date : datetime
   subject : str 
   mark : str
+
+
+
+def average(marks : list[Journal]) -> float | int:
+  marks = list(chain(*[i.mark for i in marks]))
+  marks = [float(i) for i in marks if i.isdigit()]
+  average = round(sum(marks) / len(marks),2)
+  return f"{average:g}"
 
 class Marks():
   
@@ -84,7 +97,7 @@ class Marks():
     
     return asyncio.run(main())
 
-  def get_last_results(self) -> list[Journal]:
+  def get_last(self) -> list[Journal]:
     import requests
     all_marks = []
     url = 'https://cabinet.ruobr.ru//student/progress/'
@@ -107,4 +120,40 @@ class Marks():
   def get_all(self) -> list[Journal]:
     return self.__marks()
 
+  def get_average(self, date : str) -> str:
+    """
+    param date - дата  для которой нужно вывести среднюю оценку по предметам
+    """
+    # Год
+    if len(date.split('.')) == 1:
+      croped_marks : list = [i for i in self.get_all() if i.date.strftime('%m.%Y') in get_student_year(date)]
+    # Месяц
+    elif len(date.split('.')) == 2:
+      croped_marks : list = [i for i in self.get_all() if i.date.strftime('%m.%Y') in date]
+    else: 
+      raise DateNotFoundError(f"Could not find any data for {date}")
+    
+    if not croped_marks:
+      raise DateNotFoundError(f"Could not find any data for {date}")
+    
+    
+    croped_marks.sort(key=lambda x: x.subject)
+    lessons = groupby(croped_marks, key=lambda y : y.subject)
+    
+    result = []
+    for subject,marks in lessons:
+      result.append(f'{subject}: {average(marks)}')
+    return '\n'.join(result)
+  
+  def get_day_marks(self, date : str) -> str:
+    croped_marks : list = [i for i in self.get_all() if i.date.strftime('%d.%m.%Y')==date]
+    
+    if not croped_marks:
+      raise DateNotFoundError(f"Could not find any data for {date}")
+    
+    result = []
+    for journal in croped_marks:
+      result.append(f'{journal.subject}: {journal.mark}')
+    return '\n'.join(result)
+       
   
