@@ -6,8 +6,8 @@ from .exceptions import IncorrectDateError
 
 class RuobrParser():
   
-  def __init__(self,cookie : RuobrCookies) -> None:
-    self.__cookies = cookie.cookies()
+  def __init__(self, cookie : RuobrCookies | dict) -> None:
+    self.__cookies : dict = cookie.cookies() if cookie is RuobrCookies else cookie
     
   def marks(self) -> Marks:
     return Marks(self.__cookies)

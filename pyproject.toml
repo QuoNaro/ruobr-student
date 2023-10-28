@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ruobr-student"
-version = "1.1.0"
+version = "1.1.1"
 description = "Доступ к данным cabinet.ruobr.ru для студентов"
 authors = ["QuoNaro <QuoNaro@mail.ru>"]
 readme = "README.md"
